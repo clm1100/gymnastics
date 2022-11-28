@@ -1,0 +1,72 @@
+.score{
+    
+  .headerline{
+    display: flex;
+    // background: red;
+    justify-content:space-between;
+    align-items:center;
+    overflow: hidden;
+    // .title{background: blue;}
+    .buttons{
+        width:316px;
+        padding:10px;
+        overflow: hidden;
+        display: flex;
+        // background: yellow;
+        justify-content:space-between;
+    }
+  }
+  .once{
+    background:rgba(248,248,248,1);
+    height: 20px;
+}
+.twoe{
+    background:rgba(255,255,255,1);
+    height: 35px;
+}
+.myButton {
+
+    // color:#ffffff;
+    font-family:Arial;
+}
+.myButton:hover {
+    box-shadow: 4px 4px 5px #888888; 
+}
+.myButton:active {
+    position:relative;
+    top:3px;
+}
+
+}
+.title_print{
+    display: none;
+}
+.print_title{
+  display: none;
+}
+#print_area {display: none;}
+@media print {
+  #print_area {display: block;}
+  .print_title{
+    text-align: center;
+    display: block;
+  }
+    body {
+      // margin: 1cm;
+      margin-top:2cm;
+    }
+    .title_print {
+      font-size: 20px;
+      color: red;
+      display: block;
+    }
+    
+  }
+  @page{
+    // size:a4;//定义为a4纸
+    margin:0px 300px 30px 50px;//页面的编剧
+    
+   }
+  
+
+  
