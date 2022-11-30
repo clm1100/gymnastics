@@ -2,11 +2,13 @@ import Home from '../pages/home'
 import RaceList from '../pages/RaceList'
 import Record from "../pages/record";
 import Control from '../pages/control'
+import Control2 from '../pages/control2'
 import Export from '../pages/export'
 import Setting from '../pages/setting'
 import Test from '../pages/test'
 import LeftContent from './LeftContent'
 import Display from '../pages/display'
+// import Assistant from '../pages/assistant/index';
 
 
 import {
@@ -41,6 +43,9 @@ function Content() {
                         <Route path="/control">
                             <Control />
                         </Route>
+                        <Route path="/assistant">
+                            <Control2 />
+                        </Route>
                         <Route path="/export">
                             <Export />
                         </Route>
@@ -48,7 +53,7 @@ function Content() {
                             <Test />
                         </Route>
                         <Route path="/">
-                            <Home />
+                            <RaceList />
                         </Route>
                     </Switch>
                 </div>

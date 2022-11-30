@@ -117,6 +117,8 @@ function Control(props) {
             printMsgs(sub,(a)=>{
                 const obj = JSON.parse(a);
                 console.log(obj);
+                // stopInterval()
+                setTimeText(0);
                 setPerson(obj)
               })
 
@@ -135,7 +137,8 @@ function Control(props) {
 
             printMsgs(t2,(a)=>{
                 stopInterval()
-                console.log("结束倒计时")
+                console.log("结束倒计时");
+                message.info("选手动作结束,请裁判员打分！")
             })
 
         });

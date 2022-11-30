@@ -145,6 +145,31 @@ function Control(props) {
         }
     },[order])
 
+    useEffect(()=>{
+        console.log("init");
+        setTimeout(()=>{
+            if(ws.current&&ws.current.socket.protocol.connected===true){
+                console.log(order,persons[order].teamName)
+                ws.current.sendPlayerInfo({
+                    playerNameA:persons[order].playerNameA,
+                    gameGroupSportItemName:persons[order].gameGroupSportItemName?persons[order].gameGroupSportItemName:"个人",
+                    order:Number(order),
+                    id:persons[order].playerA,
+                    resultId:persons[order].id,
+                    subSportName: persons[order].subSportName,
+                    teamId: persons[order].teamId,
+                    teamName:persons[order].teamName,
+                    ggsiId:persons[order].ggsiId,
+                    eventId:persons[order].eventId,
+                    subSportId:persons[order].subSportId,
+                    playerId:persons[order].id,
+                    catagory:persons[order].catagory,
+                })
+            }
+        },1000)
+        
+    },[])
+
 
     function next() {
 
@@ -209,6 +234,28 @@ function Control(props) {
         ws.current.send(JSON.stringify({route:'onoff',data}))
     }
 
+    function SyncData(){
+        message.loading("同步数据");
+        ws.current.sendPlayerInfo({
+            playerNameA:persons[order].playerNameA,
+            gameGroupSportItemName:persons[order].gameGroupSportItemName?persons[order].gameGroupSportItemName:"个人",
+            order:Number(order),
+            id:persons[order].playerA,
+            resultId:persons[order].id,
+            subSportName: persons[order].subSportName,
+            teamId: persons[order].teamId,
+            teamName:persons[order].teamName,
+            ggsiId:persons[order].ggsiId,
+            eventId:persons[order].eventId,
+            subSportId:persons[order].subSportId,
+            playerId:persons[order].id,
+            catagory:persons[order].catagory,
+        })
+    }
+
+    function confirmScore(){
+        message.loading("确认成绩");
+    }
 
 
 
@@ -219,8 +266,11 @@ function Control(props) {
             {/* {eventInfo.displayName?eventInfo.displayName+"-第"+eventInfo.sessionsCount+"组":'未设置'} */}
             当前参赛队员
             </Title>
-            <div><Button onClick={show} size="small">开始显示</Button>
-            <Button danger onClick={hide} size="small">关闭显示</Button></div>
+            {/* <div><Button onClick={show} size="small">开始显示</Button>
+            <Button danger onClick={hide} size="small">关闭显示</Button></div> */}
+            <div>
+                <Button onClick={SyncData} size="small">同步数据</Button>
+            </div>
         </div>
         <div className="table">
             <table className="imagetable">
@@ -248,7 +298,7 @@ function Control(props) {
                     <tr>
                         <td>{order + 1}</td>
                         <td>
-                            跳马
+                         {persons[order]&&persons[order].subSportName}
                         </td>
                         <td>
                         {persons[order]&&persons[order].playerNameA}
@@ -312,12 +362,12 @@ function Control(props) {
                         </div>
                     </div>
                     })} */}
-                    <div className="kuai">
+                    {/* <div className="kuai">
                         <Button type="text">平均分</Button>
                         <div className="fenshu">
-                            13.4
+                            
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="E">
                 {/* {persons[order].score.filter(e=>e.category==="execution").map(e=>{
@@ -339,17 +389,18 @@ function Control(props) {
                     })} */}
 
 
-                    <div className="kuai">
+                    {/* <div className="kuai">
                         <Button type="text">平均分</Button>
                         <div className="fenshu">
-                            13.4
+                            
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
         <div className="Z">
-                总分：<div className="fenshu"> 13.4</div> <Button type="primary">确认成绩</Button>
+                {/* 总分：<div style={{width:50}} className="fenshu"> </div>  */}
+                <Button onClick={confirmScore} type="primary">确认成绩</Button>
         </div>
     </div>
 }

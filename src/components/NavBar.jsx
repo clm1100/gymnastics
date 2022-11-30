@@ -52,12 +52,12 @@ function NavBar(props) {
                     type="default">
                     主裁判
                 </Button>
-                <Button
+                {/* <Button
                     onClick={() => { goPage('/record') }}
                     className={pathname === "/record" ? "buttonLink active" : "buttonLink"}
                     type="default">
                     <FormattedMessage id="成绩记录" />
-                </Button>
+                </Button> */}
                 {/* <Button
                     onClick={() => { goPage('/export') }}
                     className={pathname === "/export" ? "buttonLink active" : "buttonLink"}
@@ -71,18 +71,28 @@ function NavBar(props) {
                     <FormattedMessage id="赛事设置" />
                 </Button> */}
                
-                <Button 
+                {/* <Button 
                     onClick={() => { goPage('/') }}
                     className={pathname === "/" ? "buttonLink active" : "buttonLink" }
                     type="default">
                     赛事设置
+                </Button> */}
+
+                <Button
+                    onClick={() => { goPage('/assistant') }}
+                    className={pathname === "/assistant" ? "buttonLink active" : "buttonLink"}
+                    type="default">
+                    裁判
                 </Button>
+
                 <Button
                     onClick={() => { goPage('/racelist') }}
                     className={pathname === "/racelist" ? "buttonLink active" : "buttonLink"}
                     type="default">
                     赛事列表
                 </Button>
+
+                {/* assistant */}
                 {/* <Button
                     style={{"marginLeft":'20px'}}
                     className="changeLanguageButton"

@@ -368,8 +368,8 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
           align="center"
           width={170}
           title={i18 === "zh" ? "姓名" : "Name"}
-          dataIndex="name"
-          key="name"
+          dataIndex="playerNameA"
+          key="playerNameA"
           render={(value, record, index) => {
             return (
               <>
@@ -387,9 +387,9 @@ const ComponentToPrint = React.forwardRef((props, ref) => {
         />
         <Column
           align="center"
-          title={i18 === "zh" ? "编号" : "Number"}
-          dataIndex="num"
-          key="num"
+          title= "编号" 
+          dataIndex="playerA"
+          key="playerA"
         />
 
         {/* {highList.map((ele, index) => {

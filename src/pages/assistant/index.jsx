@@ -1,17 +1,13 @@
 import React, { useEffect, useState,useRef } from "react";
 import { connect } from "react-redux";
-import { AddAction } from '../store/actions/countActions'
 import { nextOrderAction, upOrderAction} from '../store/actions/nextorder'
 import { initOrderAction } from '../store/actions/initorder'
 import { roundAction } from "../store/actions/roundAction";
-import { circleAction } from "../store/actions/circleAction";
-import { updatePersonsAction } from "../store/actions/updatepersonsaction";
+import { updatePersonsAction } from "../../store/actions/updatepersonsaction";
 import { FormattedMessage } from "react-intl";
 import { message, Typography,  Button, Input,Modal,Divider,Form  } from 'antd';
 import { playError } from "../utils/play";
 import './control.less'
-import { wsUrl } from "../config";
-import { initContainerAction } from "../store/actions/containerActions";
 import { initOnoffAction } from '../store/actions/onoffAction'
 import createWsConnect from '../utils/ws'
 import { StringCodec } from "../utils/nats";
@@ -24,7 +20,7 @@ const { Title } = Typography;
 
 function Control(props) {
     const {
-        circle,circleAction,highList, eventInfo,order,
+        circle,highList, eventInfo,order,
          round, persons, nextorder, uporder, initorder, 
          roundAction, updatePerson ,initContainer,
          container,initOnoff
@@ -286,61 +282,44 @@ function Control(props) {
             <div className="controlRight">
                 <div className="D">
 
-                    {/* {arrs.filter(e=>e.startsWith("D")).map(e=>{
+                    {arrs.filter(e=>e.startsWith("D")).map(e=>{
                         return <div key={e} className="kuai">
                         <Button type="text">{e}</Button>
                         <div className="fenshu">
                             {persons[order].score.filter(item=>item.key===e)[0]&&persons[order].score.filter(item=>item.key===e)[0].value}
                         </div>
                     </div>
-                    })} */}
+                    })}
 
-                    {/* {persons[order].score.filter(e=>e.category==="diffcult").map(e=>{
+                    {persons[order].score.filter(e=>e.category==="diffcult").map(e=>{
                         return <div key={e.key} className="kuai">
                         <Button type="text">{e.key}</Button>
                         <div className="fenshu">
                             {e.value}
                         </div>
                     </div>
-                    })} */}
+                    })}
                     <div className="kuai">
                         <Button type="text">平均分</Button>
                         <div className="fenshu">
-                            13.4
+                            
                         </div>
                     </div>
                 </div>
                 <div className="E">
-                {/* {persons[order].score.filter(e=>e.category==="execution").map(e=>{
-                        return <div key={e.key} className="kuai">
-                        <Button type="text">{e.key}</Button>
-                        <div className="fenshu">
-                            {e.value}
-                        </div>
-                    </div>
-                    })} */}
-
-                    {/* {arrs.filter(e=>e.startsWith("E")).map(e=>{
-                        return <div key={e} className="kuai">
-                        <Button type="text">{e}</Button>
-                        <div className="fenshu">
-                            {persons[order].score.filter(item=>item.key===e)[0]&&persons[order].score.filter(item=>item.key===e)[0].value}
-                        </div>
-                    </div>
-                    })} */}
 
 
                     <div className="kuai">
                         <Button type="text">平均分</Button>
                         <div className="fenshu">
-                            13.4
+                            
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div className="Z">
-                总分：<div className="fenshu"> 13.4</div> <Button type="primary">确认成绩</Button>
+                总分：<div className="fenshu"> </div> <Button type="primary">确认成绩</Button>
         </div>
     </div>
 }
@@ -361,15 +340,7 @@ let mapstatetoprops = ({ Obj, order, round, persons, setting,eventInfo,highList,
 
 let mapdispatchtoprops = (dispatch) => {
     return {
-        add: () => dispatch(AddAction()),
-        nextorder: () => dispatch(nextOrderAction()),
-        uporder: () => dispatch(upOrderAction()),
-        initorder: () => dispatch(initOrderAction()),
-        roundAction: (type) => dispatch(roundAction(type)),
-        circleAction: (type) => dispatch(circleAction(type)),
-        initContainer: (payload) => dispatch(initContainerAction(payload)),
-        updatePerson: (payload) => dispatch(updatePersonsAction(payload)),
-        initOnoff: (payload) => dispatch(initOnoffAction(payload))
+       
     }
 }
 
