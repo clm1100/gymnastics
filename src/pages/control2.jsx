@@ -30,7 +30,7 @@ function Control(props) {
         circle,circleAction,highList, eventInfo,order,
          round, persons, nextorder, uporder, initorder, 
          roundAction, updatePerson ,initContainer,
-         container,initOnoff
+         container,initOnoff,serverIp
         } = props;
 
 
@@ -90,7 +90,7 @@ function Control(props) {
                 playerGameTime:timeText,
                 catagory:category
             }]
-        })
+        },serverIp)
         message.success("提交成功")
         
     }
@@ -249,8 +249,9 @@ function Control(props) {
     </div>
 }
 
-let mapstatetoprops = ({ Obj, order, round, persons, setting,eventInfo,highList,circle,container }) => {
+let mapstatetoprops = ({ serverIp,Obj, order, round, persons, setting,eventInfo,highList,circle,container }) => {
     return {
+        serverIp,
         Obj,
         order,
         round,

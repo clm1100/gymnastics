@@ -3,6 +3,7 @@ import {  Table, Input,Button,Divider,message,Select} from 'antd';
 import { connect } from "react-redux";
 import { updatePersonsAction,initPersonsAction } from "../store/actions/updatepersonsaction";
 import { initServerIpAction } from "../store/actions/serverIpActions"
+import { initOrderAction } from "../store/actions/initorder"
 import API from '../utils/api'
 
 const { Search } = Input;
@@ -14,7 +15,7 @@ const categorys ={
 
 
 function RaceList(props) {
-  const {serverIp, initServerIp,eventInfo,initPerson} = props
+  const {serverIp, initServerIp,eventInfo,initPerson,initOrder} = props
   const [list,setList] = useState([]);
   const [loading,setLoading] = useState(false);
   const [chang,setChang] = useState("1");
@@ -47,6 +48,7 @@ function RaceList(props) {
   }
 
   const getPersons = async (v)=>{
+    initOrder();
     const data = await API.GetAthleteList(v)
     // console.log(data);
     let persons = data.data;
@@ -127,6 +129,7 @@ let mapdispatchtoprops = (dispatch) => {
       updatePerson: (payload) => dispatch(updatePersonsAction(payload)),
       initPerson: (payload) => dispatch(initPersonsAction(payload)),
       initServerIp:(payload) => dispatch(initServerIpAction(payload)),
+      initOrder:(payload) => dispatch(initOrderAction(payload))
   }
 }
 
