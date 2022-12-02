@@ -13,6 +13,7 @@ import highList from './highList';
 import circle from './circle'
 import container from './container';
 import onoff from './onoff';
+import allscore from './allscore';
 let reducers = combineReducers({ 
     serverIp,Obj, 
     i18, setting,
@@ -20,7 +21,7 @@ let reducers = combineReducers({
     persons, round,
     order,eventInfo,
     highList,circle,
-    container,onoff
+    container,onoff,allscore,
     });
 
 export default reducers;

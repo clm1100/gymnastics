@@ -46,57 +46,26 @@ function Display(props) {
     value:container[order]?container[order].score[round]:[]
   });
   const ws = useRef();
-  const connectWebSocket = ()=>{
-    if(!status){
-        ws.current = new WebSocket(wsUrl);
-        // Web Socket 已连接上，使用 send() 方法发送数据
-        ws.current.onopen = function () {
-            message.success("ok")
-            console.log("ok")
-            setStatus(true);
-            
-        }
-        // 这里接受服务器端发过来的消息
-        ws.current.onmessage = function (e) {
 
-            console.log(e.data)
-            const obj = JSON.parse(e.data);
-            if(obj.route==='screen') {
-                console.log(obj)
-                let {
-                    realName,
-                    teamName,
-                    round,
-                    order,
-                    value
-                } = obj.data;
-                // message.success("接收到信息:")
-                setObj({
-                    realName,
-                    teamName,
-                    round,
-                    order,
-                    value
-                })
-            };
+  const timeId = useRef();
 
-            if(obj.route==="onoff"){
-                console.log(obj.data.show)
-                initOnoff(obj.data.show)
-            } 
-        }
+  const startInterval = ()=>{
+      if(timeId.current) return ;
+      // ws.current.startTime({msg:'start'})
+      timeId.current= setInterval(()=>{
+          console.log("111")
+          setTimeText((v)=>{
+              return 1000+v
+          })
+      },1000)
+  }
 
-        ws.current.onclose = function () {
-            console.log('服务器已经断开');
-            connectWebSocket()
-        };
-
-        ws.current.onerror = function (code, reason) {
-            console.log("Connection error");
-            // message.warning("连接出错了")
-        }
-    }
+  const stopInterval = ()=>{
+    if(!timeId.current) return ;
+    clearInterval( timeId.current)
+    timeId.current=undefined;
 }
+
 const printMsgs =  async(s,callback) =>{
   for await (const m of s) {
     callback&&callback(sc.decode(m.data))
@@ -107,56 +76,55 @@ useEffect(() => {
 
  
   createWsConnect((socket, sc)=>{
-    ws.current = {};
-    // console.log('socket is connect successfuly:',socket);
-    ws.current.socket = socket;
+      ws.current = {};
+      // console.log('socket is connect successfuly:',socket);
+      ws.current.socket = socket;
 
-    const start = socket.subscribe('gymnastics-screen-show');
+      const start = socket.subscribe('gymnastics-screen-show');
 
-    printMsgs(start,(a)=>{
-        const obj = JSON.parse(a);
-        console.log(obj);
-        setPerson(obj)
+      printMsgs(start,(a)=>{
+          const obj = JSON.parse(a);
+          console.log(obj);
+          setPerson(obj)
+        })
+
+
+      const sub = socket.subscribe('player-info');
+
+      printMsgs(sub,(a)=>{
+          const obj = JSON.parse(a);
+          console.log(obj);
+          // stopInterval()
+          setTimeText(0);
+          setPerson(obj)
+        })
+
+
+
+
+      const t1 = socket.subscribe('start-time');
+
+      printMsgs(t1,(a)=>{
+          //   const obj = JSON.parse(a);
+          startInterval()
+          console.log("开始倒计时")
       })
 
+      const t2 = socket.subscribe('end-time');
 
-    const sub = socket.subscribe('player-info');
-
-    printMsgs(sub,(a)=>{
-        const obj = JSON.parse(a);
-        console.log(obj);
-        // stopInterval()
-        setTimeText(0);
-        setPerson(obj)
+      printMsgs(t2,(a)=>{
+          stopInterval()
+          console.log("结束倒计时");
+          message.info("选手动作结束,请裁判员打分！")
       })
-
-
-
-
-    const t1 = socket.subscribe('start-time');
-
-    printMsgs(t1,(a)=>{
-        //   const obj = JSON.parse(a);
-        startInterval()
-        console.log("开始倒计时")
-    })
-
-    const t2 = socket.subscribe('end-time');
-
-    printMsgs(t2,(a)=>{
-        stopInterval()
-        console.log("结束倒计时");
-        message.info("选手动作结束,请裁判员打分！")
-    })
-
-});
-
-return () => { 
-    ws.current.socket&&ws.current.socket.closed(); 
-    console.log("退出大屏") 
-}
 
   });
+
+  return () => { 
+      ws.current.socket&&ws.current.socket.closed(); 
+      console.log("退出赛事管理") 
+  }
+}, []);
 
   // console.log(ws.current.socket.closed((e)=>{
   //     e('断开')
@@ -165,6 +133,7 @@ return () => {
   return (
     <div className="displayWrap">
       <div className="content">
+      {timeText}
       {onoff?<><div className="up">
           <span
             style={{ marginRight:"5px",fontSize: obj.realName.length >= 4 ? "20px" : "36px" }}
@@ -177,7 +146,7 @@ return () => {
           <div className="row">{obj.teamName}</div>
           <div className="row row1">
             <div style={{ marginRight: "30px" }}>
-              成绩：
+              成绩：{timeText}
               <span className="round">
                 <Mark value={obj.value}></Mark>
               </span>

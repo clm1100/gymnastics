@@ -91,6 +91,21 @@ function Control(props) {
                 catagory:category
             }]
         },serverIp)
+
+        ws.current.pushCollectData({
+            ggsiId:person.ggsiId,
+            eventId:person.eventId,
+            subSportId:person.subSportId,
+            playerId:person.id,
+            resultId:person.resultId,
+            resultInfo:[{
+                key:referee,
+                value:score,
+                playerGameTime:timeText,
+                catagory:category
+            }]
+        })
+
         message.success("提交成功")
         
     }
@@ -102,6 +117,10 @@ function Control(props) {
             ws.current = {};
             // console.log('socket is connect successfuly:',socket);
             ws.current.socket = socket;
+
+            ws.current.pushCollectData = (msg)=>{
+                socket.publish('collect-data', sc.encode(JSON.stringify(msg)));
+            }
 
             const start = socket.subscribe('gymnastics-screen-show');
 

@@ -8,6 +8,7 @@ import { circleAction } from "../store/actions/circleAction";
 import { updatePersonsAction } from "../store/actions/updatepersonsaction";
 import { FormattedMessage } from "react-intl";
 import { message, Typography,  Button, Input,Modal,Divider,Form  } from 'antd';
+import { pushAllScore } from '../store/actions/allScoreAction'
 import { playError } from "../utils/play";
 import './control.less'
 import { wsUrl } from "../config";
@@ -27,7 +28,7 @@ function Control(props) {
         circle,circleAction,highList, eventInfo,order,
          round, persons, nextorder, uporder, initorder, 
          roundAction, updatePerson ,initContainer,
-         container,initOnoff
+         container,initOnoff,pushAllScore,allscore
         } = props;
 
 
@@ -88,6 +89,9 @@ function Control(props) {
                 socket.publish('end-time', sc.encode(JSON.stringify(msg)));
             }
 
+
+            
+
             const sub = socket.subscribe('update-result');
 
             printMsgs(sub,(a)=>{
@@ -112,15 +116,24 @@ function Control(props) {
 
               })
 
+
+
+
+              const collectData = socket.subscribe('collect-data');
+
+              printMsgs(collectData,(a)=>{
+                const obj = JSON.parse(a);
+                console.log(obj);
+                pushAllScore(obj);
+            })
+
+
         });
 
-        // console.log(ws.current.socket.closed((e)=>{
-        //     e('断开')
-        // }));
         return () => { 
 
             ws.current.socket&&ws.current.socket.closed(); 
-            console.log("退出赛事管理") 
+            console.log("退出主裁判页面") 
         }
     }, []);
 
@@ -370,6 +383,7 @@ function Control(props) {
                     </div> */}
                 </div>
                 <div className="E">
+                    {allscore.length}
                 {/* {persons[order].score.filter(e=>e.category==="execution").map(e=>{
                         return <div key={e.key} className="kuai">
                         <Button type="text">{e.key}</Button>
@@ -405,7 +419,7 @@ function Control(props) {
     </div>
 }
 
-let mapstatetoprops = ({ Obj, order, round, persons, setting,eventInfo,highList,circle,container }) => {
+let mapstatetoprops = ({ Obj, order, round, persons, setting,eventInfo,highList,circle,container,allscore }) => {
     return {
         Obj,
         order,
@@ -416,6 +430,7 @@ let mapstatetoprops = ({ Obj, order, round, persons, setting,eventInfo,highList,
         highList,
         circle,
         container,
+        allscore,
     }
 }
 
@@ -429,7 +444,8 @@ let mapdispatchtoprops = (dispatch) => {
         circleAction: (type) => dispatch(circleAction(type)),
         initContainer: (payload) => dispatch(initContainerAction(payload)),
         updatePerson: (payload) => dispatch(updatePersonsAction(payload)),
-        initOnoff: (payload) => dispatch(initOnoffAction(payload))
+        initOnoff: (payload) => dispatch(initOnoffAction(payload)),
+        pushAllScore: (payload) => dispatch(pushAllScore(payload))
     }
 }
 
