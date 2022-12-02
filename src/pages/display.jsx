@@ -9,6 +9,10 @@ import { wsUrl } from "../config";
 import { message } from "antd";
 import "./display.less";
 import { initOnoffAction } from '../store/actions/onoffAction'
+import createWsConnect from '../utils/ws'
+import { StringCodec } from "../utils/nats";
+
+const sc = StringCodec();
 
 function Mark(props) {
 
@@ -32,6 +36,8 @@ function Mark(props) {
 function Display(props) {
   const { highList,onoff,circle,container,round,order,initOnoff } = props;
   const [status,setStatus] = useState(false);
+  const [person, setPerson] = useState({});
+  const [timeText,setTimeText] = useState(0);
   const [obj, setObj] = useState({
     realName:container[order]?container[order].name:"",
     teamName:container[order]?container[order].teamName:'',
@@ -91,14 +97,70 @@ function Display(props) {
         }
     }
 }
-
+const printMsgs =  async(s,callback) =>{
+  for await (const m of s) {
+    callback&&callback(sc.decode(m.data))
+  }
+}
 
 useEffect(() => {
 
-  connectWebSocket()
+ 
+  createWsConnect((socket, sc)=>{
+    ws.current = {};
+    // console.log('socket is connect successfuly:',socket);
+    ws.current.socket = socket;
 
-  return () => { ws.current.close(); console.log("退出显示") }
-}, []);
+    const start = socket.subscribe('gymnastics-screen-show');
+
+    printMsgs(start,(a)=>{
+        const obj = JSON.parse(a);
+        console.log(obj);
+        setPerson(obj)
+      })
+
+
+    const sub = socket.subscribe('player-info');
+
+    printMsgs(sub,(a)=>{
+        const obj = JSON.parse(a);
+        console.log(obj);
+        // stopInterval()
+        setTimeText(0);
+        setPerson(obj)
+      })
+
+
+
+
+    const t1 = socket.subscribe('start-time');
+
+    printMsgs(t1,(a)=>{
+        //   const obj = JSON.parse(a);
+        startInterval()
+        console.log("开始倒计时")
+    })
+
+    const t2 = socket.subscribe('end-time');
+
+    printMsgs(t2,(a)=>{
+        stopInterval()
+        console.log("结束倒计时");
+        message.info("选手动作结束,请裁判员打分！")
+    })
+
+});
+
+return () => { 
+    ws.current.socket&&ws.current.socket.closed(); 
+    console.log("退出大屏") 
+}
+
+  });
+
+  // console.log(ws.current.socket.closed((e)=>{
+  //     e('断开')
+  // }));
 
   return (
     <div className="displayWrap">
