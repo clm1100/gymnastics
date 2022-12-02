@@ -78,32 +78,27 @@ function Control(props) {
     }
 
     const updateScore = async()=>{
-        const result = await API.UpdateResult({
-            ggsiId:person.ggsiId,
-            eventId:person.eventId,
-            subSportId:person.subSportId,
-            playerId:person.id,
-            resultId:person.resultId,
-            resultInfo:[{
-                key:referee,
-                value:score,
-                playerGameTime:timeText,
-                catagory:category
-            }]
-        },serverIp)
+        // const result = await API.UpdateResult({
+        //     ggsiId:person.ggsiId,
+        //     eventId:person.eventId,
+        //     subSportId:person.subSportId,
+        //     playerId:person.id,
+        //     resultId:person.resultId,
+        //     resultInfo:[{
+        //         key:referee,
+        //         value:score,
+        //         playerGameTime:timeText,
+        //         catagory:category
+        //     }]
+        // },serverIp)
+
+        if(!referee||!category) return  message.error("请选择裁判编号和分数类型")
 
         ws.current.pushCollectData({
-            ggsiId:person.ggsiId,
-            eventId:person.eventId,
-            subSportId:person.subSportId,
-            playerId:person.id,
-            resultId:person.resultId,
-            resultInfo:[{
-                key:referee,
-                value:score,
-                playerGameTime:timeText,
-                catagory:category
-            }]
+            key:referee,
+            value:score,
+            playerGameTime:timeText,
+            category:category
         })
 
         message.success("提交成功")

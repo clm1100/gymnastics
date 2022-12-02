@@ -28,7 +28,7 @@ function Control(props) {
         circle,circleAction,highList, eventInfo,order,
          round, persons, nextorder, uporder, initorder, 
          roundAction, updatePerson ,initContainer,
-         container,initOnoff,pushAllScore,allscore
+         container,initOnoff,pushAllScore,allscore=[]
         } = props;
 
 
@@ -356,7 +356,7 @@ function Control(props) {
         </div>
         <div className="controlData">
             <div className="controlRight">
-                <div className="D">
+                <div style={{height:'100px',boxSizing:'border-box'}} className="D">
 
                     {/* {arrs.filter(e=>e.startsWith("D")).map(e=>{
                         return <div key={e} className="kuai">
@@ -367,23 +367,30 @@ function Control(props) {
                     </div>
                     })} */}
 
-                    {/* {persons[order].score.filter(e=>e.category==="diffcult").map(e=>{
+                    {allscore.filter(e=>e.category==="diffcult").map(e=>{
                         return <div key={e.key} className="kuai">
                         <Button type="text">{e.key}</Button>
                         <div className="fenshu">
                             {e.value}
                         </div>
                     </div>
-                    })} */}
-                    {/* <div className="kuai">
+                    })}
+                    <div className="kuai">
                         <Button type="text">平均分</Button>
                         <div className="fenshu">
                             
                         </div>
-                    </div> */}
+                    </div>
                 </div>
                 <div className="E">
-                    {allscore.length}
+                {allscore.filter(e=>e.category==="execution").map(e=>{
+                        return <div key={e.key} className="kuai">
+                        <Button type="text">{e.key}</Button>
+                        <div className="fenshu">
+                            {e.value}
+                        </div>
+                    </div>
+                    })}
                 {/* {persons[order].score.filter(e=>e.category==="execution").map(e=>{
                         return <div key={e.key} className="kuai">
                         <Button type="text">{e.key}</Button>
@@ -403,12 +410,12 @@ function Control(props) {
                     })} */}
 
 
-                    {/* <div className="kuai">
+                    <div className="kuai">
                         <Button type="text">平均分</Button>
                         <div className="fenshu">
                             
                         </div>
-                    </div> */}
+                    </div>
                 </div>
             </div>
         </div>
