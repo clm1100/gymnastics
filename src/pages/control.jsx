@@ -17,6 +17,8 @@ import { initOnoffAction } from '../store/actions/onoffAction'
 import createWsConnect from '../utils/ws'
 import { StringCodec } from "../utils/nats";
 import Moment from 'moment';
+import API from '../utils/api'
+
 const arrs = ["D1","D2","D3","D4","E1","E2","E3","E4","E5","E6"]
 
 const sc = StringCodec();
@@ -266,8 +268,35 @@ function Control(props) {
         })
     }
 
-    function confirmScore(){
-        message.loading("确认成绩");
+    // function confirmScore(){
+    //     message.loading("确认成绩");
+    // }
+
+    const confirmScore = async()=>{
+        console.log("allscore",allscore)
+        console.log(persons[order]);
+        const result = await API.UpdateResult({
+            ggsiId:persons[order].ggsiId,
+            eventId:persons[order].eventId,
+            subSportId:persons[order].subSportId,
+            playerId:persons[order].playerA,
+            resultId:persons[order].id,
+            resultInfo:allscore
+        })
+
+        console.log(result)
+
+        // if(!referee||!category) return  message.error("请选择裁判编号和分数类型")
+
+        // ws.current.pushCollectData({
+        //     key:referee,
+        //     value:score,
+        //     playerGameTime:timeText,
+        //     category:category
+        // })
+
+        message.success("提交成功")
+        
     }
 
 
